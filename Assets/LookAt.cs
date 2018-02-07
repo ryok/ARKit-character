@@ -4,19 +4,29 @@ using UnityEngine;
 
 public class LookAt : MonoBehaviour {
 
-	[SerializeField]
-	[Tooltip("ターゲットとなるオブジェクト")]
-	private Transform _target;
-
-	private HeadLookController _headLookController;
+	private Transform target;
+	private HeadLookController controller;
 
 	// Use this for initialization
 	private void Start () {
-		_headLookController = GetComponent<HeadLookController> ();
+		controller = GetComponent<HeadLookController> ();
+	}
+
+	void OnTriggerEnter(Collider other){
+		if (target != null) {
+			return;
+		}
+
+		if (other.CompareTag("Player")){
+			Debug.Log ("hit!");
+			target = other.transform;
+		}
 	}
 	
 	// Update is called once per frame
 	private void LateUpdate () {
-		_headLookController.target = _target.position;
+		if (target != null) {
+			controller.target = target.position;
+		}
 	}
 }
